@@ -4,7 +4,7 @@
 /// Any Erlang or Gleam function in the `test` directory with a name editing in
 /// `_test` is considered a test function and will be run.
 ///
-/// If running on JavaScript tests will be run with a custom test runner.
+/// If running on JavaScript or Nix tests will be run with a custom test runner.
 ///
 pub fn main() -> Nil {
   do_main()
@@ -12,6 +12,10 @@ pub fn main() -> Nil {
 
 @target(javascript)
 @external(javascript, "./gleeunit_ffi.mjs", "main")
+fn do_main() -> Nil
+
+@target(nix)
+@external(nix, "./gleeunit_ffi.nix", "main")
 fn do_main() -> Nil
 
 @target(erlang)
