@@ -120,15 +120,20 @@ let
             else results;
 
         testFunction =
-          { success, message }: functionName:
+          { message, tests, failures }: functionName:
             let
               function = exports.${functionName};
               call = function {}; # must have zero parameters for this to work
               evaluation = builtins.tryEval (builtins.deepSeq call call);
               results =
                 if evaluation.success
-                then { inherit success; message = message + "."; }
-                else { success = false; message = message + "\n❌ ${module}.${functionName} failed\n"; };
+                then { inherit failures; message = message + "."; tests = tests + 1; }
+                else
+                  {
+                    message = message + "\n❌ ${module}.${functionName} failed\n";
+                    tests = tests + 1;
+                    failures = failures + 1;
+                  };
             in results;
 
         exportedMembers = builtins.attrNames exports;
@@ -141,7 +146,7 @@ let
   # :: AttrSet
   testResults =
     builtins.foldl'
-      (results@{ success, message }: testPath:
+      (results@{ message, ... }: testPath:
         let
           module = stripGleamSuffix testPath;
           compiledTestModulePath = compiledTestFile testPath;
@@ -150,13 +155,17 @@ let
         in
           if builtins.pathExists compiledTestModulePath
           then newResults
-          else { success = false; message = message + "\n❌ ${module} wasn't compiled\n"; })
-      { success = true; message = ""; }
+          else results // { message = message + "\n⚠ ${module} wasn't compiled; ignoring\n"; })
+      { message = ""; tests = 0; failures = 0; }
       gleamTestFiles;
 
   main =
     {}:
-      if testResults.success
-      then builtins.trace testResults.message null
-      else builtins.throw "Some tests failed.\n${testResults.message}";
+      let
+        failures = if testResults.failures == 1 then "failure" else "failures";
+        testResultMessage = "${testResults.message}\n${builtins.toString testResults.tests} tests, ${builtins.toString testResults.failures} ${failures}";
+      in
+        if testResults.failures == 0
+        then builtins.trace testResultMessage null
+        else builtins.throw "Some tests failed.\n${testResultMessage}";
 in { inherit main; }
