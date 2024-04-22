@@ -1,18 +1,21 @@
-# gleeunit
+# glistix_gleeunit
 
-Gleam bindings to the Erlang EUnit test framework.
+A fork of [`gleeunit`](https://github.com/lpil/gleeunit) for Glistix's Nix target.
 
-A custom test runner is included for when compiled to JavaScript running on
-either NodeJS or Deno.
+A custom test runner is included for when compiled to Nix, as well as
+to JavaScript (using `gleeunit`'s original JavaScript test runner).
 
-Documentation is available on [HexDocs](https://hexdocs.pm/gleeunit/index.html).
+**Note:** This is a Glistix project, and as such may require the
+[Glistix compiler](https://github.com/glistix/glistix) to be used.
+
+Documentation is available on [HexDocs](https://hexdocs.pm/glistix_gleeunit/index.html).
 
 ## Usage
 
-Add this package to your Gleam project.
+Add this package to your Glistix project.
 
 ```sh
-gleam add gleeunit --dev
+glistix add glistix_gleeunit --dev
 ```
 
 And then call the `gleeunit.main` function from your test main function.
@@ -35,7 +38,7 @@ pub fn the_universe_test() {
 }
 ```
 
-Run the tests by entering `gleam test` in the command line.
+Run the tests by entering `glistix test` in the command line.
 
 ### Deno
 
