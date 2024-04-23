@@ -1,6 +1,6 @@
 # glistix_gleeunit
 
-[**View Codeberg mirror**](https://codeberg.org/Glistix/gleeunit)
+**Mirrors:** [**GitHub**](https://github.com/Glistix/gleeunit) | [**Codeberg**](https://codeberg.org/Glistix/gleeunit)
 
 A fork of [`gleeunit`](https://github.com/lpil/gleeunit) for Glistix's Nix target.
 
